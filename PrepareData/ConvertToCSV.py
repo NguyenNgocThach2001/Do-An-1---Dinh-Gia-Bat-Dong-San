@@ -39,8 +39,15 @@ csv_header = tag
 dataset = []
 for it in pre_data:
     tmp = []
-    for it1 in it:
-        tmp.append(*it1.values())
+    for tags in csv_header:
+        flag = False
+        for pair in it:
+            if(tags == list(pair.keys())[0]):
+                flag = True
+                tmp.append(*pair.values())
+                break
+        if(flag == False):
+            tmp.append("None")
     dataset.append(tmp)
 
 with open('House_Dataset.csv', 'w+', encoding='UTF8') as f:
