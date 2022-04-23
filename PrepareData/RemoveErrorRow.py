@@ -59,3 +59,4 @@ with open("house_data_0space.txt", mode="w+", encoding="utf-8") as fp:
             for op in output:
                 fp.write(op)
             output = []
+

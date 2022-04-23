@@ -44,7 +44,8 @@ for it in pre_data:
         for pair in it:
             if(tags == list(pair.keys())[0]):
                 flag = True
-                tmp.append(*pair.values())
+                tmp.append(str(*pair.values()).split(" ")[0])
+                #tmp.append(*pair.values()) giu nguyen don vi
                 break
         if(flag == False):
             tmp.append("None")
