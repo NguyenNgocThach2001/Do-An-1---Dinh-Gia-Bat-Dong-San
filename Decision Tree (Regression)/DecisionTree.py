@@ -1,38 +1,57 @@
 import numpy as np
 import pandas as pd
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import explained_variance_score
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeRegressor
 
-data = pd.read_csv("House_Dataset.csv")
-print(data.head(5))
+dataset = pd.read_csv("Dataset.csv", index_col=0)
+# print("Dataset: ")
+# print(dataset)
 
+X = dataset.iloc[:,1:].values #Variable
+Y = dataset.iloc[:,0].values #Target
+X_train,X_test,y_train,y_test=train_test_split(X,Y,test_size=0.3,random_state=0) #split train model
 
+# print("X (Variable): ")
+# print(X)
+# print("Y (Target): ")
+# print(Y)
 
-# from sklearn.tree import DecisionTreeRegressor
-# import matplotlib.pyplot as plt
+#DecisionTreeRegressor
+tr_regressor = DecisionTreeRegressor(random_state=0)
+tr_regressor.fit(X_train,y_train)
+tr_regressor.score(X_test,y_test)
+pred_tr = tr_regressor.predict(X_test)
+decision_score=tr_regressor.score(X_test,y_test)
+expl_tr = explained_variance_score(pred_tr,y_test)
 
-# # Create a random dataset
-# rng = np.random.RandomState(1)
-# X = np.sort(5 * rng.rand(80, 1), axis=0)
-# y = np.sin(X).ravel()
-# y[::5] += 3 * (0.5 - rng.rand(16))
+#LineaerRegression
+mlr = LinearRegression()
+mlr.fit(X_train,y_train)
+mlr_score = mlr.score(X_test,y_test)
+pred_mlr = mlr.predict(X_test)
+expl_mlr = explained_variance_score(pred_mlr,y_test)
 
-# # Fit regression model
-# regr_1 = DecisionTreeRegressor(max_depth=2)
-# regr_2 = DecisionTreeRegressor(max_depth=5)
-# regr_1.fit(X, y)
-# regr_2.fit(X, y)
+print("Multiple Linear Regression Model Score is ",round(mlr.score(X_test,y_test)*100))
+print("Decision tree Regression Model Score is:",round(tr_regressor.score(X_test,y_test)*100))
 
-# # Predict
-# X_test = np.arange(0.0, 5.0, 0.01)[:, np.newaxis]
-# y_1 = regr_1.predict(X_test)
-# y_2 = regr_2.predict(X_test)
+models_score =pd.DataFrame({'Model':['Multiple Linear Regression','Decision Tree'],
+                            'Score':[mlr_score,decision_score],
+                            'Explained Variance Score':[expl_mlr,expl_tr]
+                           })
+models_score.sort_values(by='Score',ascending=False)
+print(models_score)
 
-# # Plot the results
-# plt.figure()
-# plt.scatter(X, y, s=20, edgecolor="black", c="darkorange", label="data")
-# plt.plot(X_test, y_1, color="cornflowerblue", label="max_depth=2", linewidth=2)
-# plt.plot(X_test, y_2, color="yellowgreen", label="max_depth=5", linewidth=2)
-# plt.xlabel("data")
-# plt.ylabel("target")
-# plt.title("Decision Tree Regression")
-# plt.legend()
-# plt.show()
+New_Data = [[[100,1,2,2]]
+           ,[[100,2,1,2]]
+           ,[[100,2,2,1]]
+           ,[[100,2,2,2]]]
+
+print("Regression Tree Predict: ")
+for index, it in enumerate(New_Data):
+    print("Predict " + str(index) + ": " + str(tr_regressor.predict(it)))
+
+print("Multiple Linear Regression Predict: ")
+for index, it in enumerate(New_Data):
+    print("Predict " + str(index) + ": " + str(mlr.predict(it)))
