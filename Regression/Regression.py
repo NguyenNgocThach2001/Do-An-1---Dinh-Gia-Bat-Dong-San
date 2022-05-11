@@ -47,7 +47,11 @@ print(models_score)
 New_Data = [[[100,1,2,2]]
            ,[[100,2,1,2]]
            ,[[100,2,2,1]]
-           ,[[100,2,2,2]]]
+           ,[[100,2,2,2]]
+           ,[[150,3,1,4]]
+           ,[[125,2,2,1]]
+           ,[[50,2,4,1]]
+           ,[[25,3,3,3]]]
 
 TRR_Result = []
 print("Regression Tree Predict: ")
@@ -60,6 +64,10 @@ print("Multiple Linear Regression Predict: ")
 for index, it in enumerate(New_Data):
     print("Predict " + str(index) + ": " + str(mlr.predict(it)))
     MLR_Result.append(mlr.predict(it))
+
+print("Predict Comparison: RT \ MLR")
+for index, it in enumerate(TRR_Result):
+    print("Predict " + str(index) + ": " + str(*TRR_Result[index]) + " \ " + str(*MLR_Result[index]))
 
 df = dataset.to_numpy()
 xprice = df[ :, 0]#Areage
