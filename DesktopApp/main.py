@@ -1,9 +1,9 @@
-from email import message
-from math import comb
+import csv
+from tkinter import *
 import sys
 sys.path.insert(0, 'Do-An-1---Dinh-Gia-Bat-Dong-San\Selenium_Crawl')
 from Scrape_Page import Crawl_Page
-from Scrape_Data import Crawl_Data
+from Scrape_Data import Crawl_Data 
 import sys
 sys.path.insert(0, 'Do-An-1---Dinh-Gia-Bat-Dong-San\PrepareData')
 from FillMissingData import FillMissing
@@ -138,7 +138,7 @@ class AutocompleteCombobox(tkinter.ttk.Combobox):
                 # list at the position of the autocompletion
 
 
-DSQH = ('Bất kỳ', 'Thành Phố Thủ Đức', 'Quận 1', 'Quận 2', 'Quận 3', 'Quận 4', 'Quận 5', 'Quận 6', 'Quận 7',
+DSQH = ('Thành Phố Thủ Đức', 'Quận 1', 'Quận 2', 'Quận 3', 'Quận 4', 'Quận 5', 'Quận 6', 'Quận 7',
         'Quận 8', 'Quận 9', 'Quận 10', 'Quận 11', 'Quận 12', 'Quận Bình Tân',
         'Quận Bình Thạnh', 'Quận Gò Vấp', 'Quận Phú Nhuận', 'Quận Tân Bình',
         'Quận Tân Phú', 'Huyện Bình Chánh', 'Huyện Cần Giờ', 'Huyện Củ Chi',
@@ -149,91 +149,210 @@ root = tkinter.Tk(className=' Định Giá Bất Động Sản')
 root.resizable(False, False)
 ws = root.winfo_screenwidth() 
 hs = root.winfo_screenheight() 
-w = 700 
-h = 700 
+w = 1400
+h = 700
 x = (ws/2) - (w/2)
-y = (hs/2) - (h/2)
+y = (hs/2) - (h/2) - 25
 root.geometry('%dx%d+%d+%d' % (w, h, x, y))
 
+top_left_frame_container = tkinter.Frame(root, width=700, height=200)
+top_left_frame_container.pack_propagate(0)
+middle_left_frame_container = tkinter.Frame(root, width=700, height=300)
+middle_left_frame_container.pack_propagate(0)
+bottom_left_frame_container = tkinter.Frame(root, width=700, height=200)
+bottom_left_frame_container.pack_propagate(0)
 
-frame1 = tkinter.Frame(root)
-frame1.pack(side = tkinter.TOP)
+top_right_frame_container = tkinter.Frame(root, width=700, height=200)
+top_right_frame_container.pack_propagate(0)
+middle_right_frame_container = tkinter.Frame(root, width=700, height=300)
+middle_right_frame_container.pack_propagate(0)
+bottom_right_frame_container = tkinter.Frame(root, width=700, height=200)
+bottom_right_frame_container.pack_propagate(0)
 
-frame2 = tkinter.Frame(root)
-frame2.pack(side = tkinter.TOP)
+root.grid_rowconfigure(1, weight=0)
+root.grid_columnconfigure(0, weight=0)
 
-frame3 = tkinter.Frame(root)
-frame3.pack(side = tkinter.TOP)
+top_left_frame_container.grid(row = 0, sticky="NW")
+middle_left_frame_container.grid(row = 1, sticky="W")
+bottom_left_frame_container.grid(row = 2, sticky="SW")
 
-frame4 = tkinter.Frame(root)
-frame4.pack(side = tkinter.TOP)
+top_right_frame_container.grid(row = 0, column= 1, sticky="NE")
+middle_right_frame_container.grid(row = 1, column= 1,sticky="E")
+bottom_right_frame_container.grid(row = 2, column= 1,sticky="SE")
 
-frame5 = tkinter.Frame(root)
-frame5.pack(side = tkinter.TOP)
+wrapperCrawlRight = tkinter.LabelFrame(top_right_frame_container, text="Diện Tích/Giá", width = 700)
+wrapperCrawlRight.pack(fill = BOTH, padx = 10, pady=10)
+frame111 = tkinter.Frame(wrapperCrawlRight)            
+frame111.pack(side = tkinter.TOP, fill = BOTH)
+l111 = tkinter.Label(frame111, text = "Thành Phố: ", font="TimesNewRoman 15 bold")
+l111.pack(side = tkinter.LEFT)
 
-frame6 = tkinter.Frame(root)
-frame6.pack(side = tkinter.TOP)
 
-l1 = tkinter.Label(frame1, text = "Thành Phố:       ", font="TimesNewRoman 15 bold")
+wrapperCrawl = tkinter.LabelFrame(top_left_frame_container, text="Cào dữ liệu", width = 700)
+wrapperCrawl.pack(fill = BOTH, padx = 10, pady=10)
+
+frame1 = tkinter.Frame(wrapperCrawl)            
+frame1.pack(side = tkinter.TOP, fill = BOTH)
+frame2 = tkinter.Frame(wrapperCrawl)            
+frame2.pack(side = tkinter.TOP, fill = BOTH)
+frame3 = tkinter.Frame(wrapperCrawl)            
+frame3.pack(side = tkinter.TOP, fill = BOTH)
+frame4 = tkinter.Frame(wrapperCrawl)            
+frame4.pack(side = tkinter.TOP, fill = BOTH)
+frame5 = tkinter.Frame(wrapperCrawl)            #Crawl Btn
+frame5.pack(side = tkinter.TOP, fill = BOTH)
+
+wrapperData = tkinter.LabelFrame(middle_left_frame_container, text = "Dữ Liệu", width=700)
+wrapperData.pack(fill = BOTH, padx = 10, pady=10)
+
+wrapperPredict = tkinter.LabelFrame(bottom_left_frame_container, text = "Nhập và định giá bất động sản", width=700)
+wrapperPredict.pack(fill = BOTH, padx = 10, pady=10)
+frame11 = tkinter.Frame(wrapperPredict)
+frame11.pack(side = tkinter.BOTTOM, fill="both")
+frame6 = tkinter.Frame(wrapperPredict)
+frame6.pack(side = tkinter.TOP, fill="both")
+frame7 = tkinter.Frame(wrapperPredict)
+frame7.pack(side = tkinter.TOP, fill="both")
+frame8 = tkinter.Frame(wrapperPredict)
+frame8.pack(side = tkinter.TOP, fill="both")
+frame9 = tkinter.Frame(wrapperPredict)
+frame9.pack(side = tkinter.TOP, fill="both")   
+frame10 = tkinter.Frame(wrapperPredict)
+frame10.pack(side = tkinter.TOP, fill="both")
+
+
+l1 = tkinter.Label(frame1, text = "Thành Phố: ", font="TimesNewRoman 15 bold")
 l1.pack(side = tkinter.LEFT)
 combo = AutocompleteCombobox(frame1, font="TimesNewRoman 20 bold")
 combo.set_completion_list(DSQH)
-combo.pack(side = tkinter.LEFT)
+combo.insert(END, 'Thành Phố Thủ Đức')
+combo.pack(side = tkinter.LEFT, padx = 30)
 
 
-l2 = tkinter.Label(frame2, text = "Giá từ:         ", font="TimesNewRoman 15 bold")
+l2 = tkinter.Label(frame2, text = "Giá (tỷ): ", font="TimesNewRoman 15 bold")
 l2.pack(side = tkinter.LEFT)
-entry1 = tkinter.Entry (frame2) 
-entry1.pack(side = tkinter.LEFT)
+entry1 = tkinter.Entry (frame2, width=5) 
+entry1.insert(END, '0')
+entry1.pack(side = tkinter.LEFT, padx = (63, 0))
 l3 = tkinter.Label(frame2, text = "đến", font="TimesNewRoman 15 bold")
 l3.pack(side = tkinter.LEFT)
-entry2 = tkinter.Entry (frame2) 
+entry2 = tkinter.Entry (frame2, width=5) 
+entry2.insert(END, '100')
 entry2.pack(side = tkinter.LEFT)
 
-l4 = tkinter.Label(frame3, text = "Diện Tích từ:", font="TimesNewRoman 15 bold")
+l4 = tkinter.Label(frame3, text = "Diện tích (m2): ", font="TimesNewRoman 15 bold")
 l4.pack(side = tkinter.LEFT)
-entry3 = tkinter.Entry (frame3) 
-entry3.pack(side = tkinter.LEFT)
+entry3 = tkinter.Entry (frame3, width=5) 
+entry3.insert(END, '0')
+entry3.pack(side = tkinter.LEFT, padx = 1)
 l5 = tkinter.Label(frame3, text = "đến", font="TimesNewRoman 15 bold")
 l5.pack(side = tkinter.LEFT)
-entry4 = tkinter.Entry (frame3) 
+entry4 = tkinter.Entry (frame3, width=5) 
+entry4.insert(END, '100')
 entry4.pack(side = tkinter.LEFT)
 
 l6 = tkinter.Label(frame4, text = "Số dữ liệu lấy: ", font="TimesNewRoman 15 bold")
 l6.pack(side = tkinter.LEFT)
-entry5 = tkinter.Entry (frame4) 
-entry5.pack(side = tkinter.LEFT)
+entry5 = tkinter.Entry (frame4, width=10) 
+entry5.insert(END, '100')
+entry5.pack(side = tkinter.LEFT, padx = 3)
 
 def CrawlData():
     messagebox.showinfo("Thành Phố", str(combo.get()))
     messagebox.showinfo("Giá", "Giá từ " + str(entry1.get()) + " đến " + str(entry2.get()))
     messagebox.showinfo("Diện tích", "Diện tích từ " + str(entry3.get()) + " đến " + str(entry4.get()))
     messagebox.showinfo("Lấy dữ liệu trang", "")
-    # Crawl_Page(combo.get(), int(entry5.get()))
-    # # messagebox.showinfo("Lấy dữ liệu từng trang", "")
-    # print("Lấy dữ liệu từng trang")
-    # Crawl_Data()
-    # # messagebox.showinfo("Xóa dữ liệu lỗi", "")
-    # print("Xóa dữ liệu lỗi")
-    # RemoveError()
-    # # messagebox.showinfo("Chuyển thành TXT", "")
-    # print("Chuyển thành TXT")
-    # TXT2CSV()
-    # # messagebox.showinfo("Điền dữ liệu khuyết", "")
+    Crawl_Page(combo.get(), int(entry5.get()))
+    # messagebox.showinfo("Lấy dữ liệu từng trang", "")
+    print("Lấy dữ liệu từng trang")
+    Crawl_Data()
+    # messagebox.showinfo("Xóa dữ liệu lỗi", "")
+    print("Xóa dữ liệu lỗi")
+    RemoveError()
+    # messagebox.showinfo("Chuyển thành TXT", "")
+    print("Chuyển thành TXT")
+    TXT2CSV()
+    # messagebox.showinfo("Điền dữ liệu khuyết", "")
     print("Điền dữ liệu khuyết")
-    FillMissing(int(entry2.get()), int(entry4.get()))
-    # messagebox.showinfo("Train")
-    print("Predict")
-    Predicts()
+    FillMissing(int(float(entry2.get())), int(float(entry4.get())))
+    print("Xong")
 
 submitBtn = tkinter.Button(frame5, text='Crawl Data', command=CrawlData, bg='brown', fg='white', font=('helvetica', 9, 'bold'))
 submitBtn.pack(side = tkinter.TOP)
 
+class TreeVieww:
+    def __init__(self, root, lst):
+        trv = tkinter.ttk.Treeview(root,selectmode='browse', columns=(1,2,3,4,5,6), show="headings", height = "12")
+        trv.pack(side = 'left')
+        vsb = tkinter.ttk.Scrollbar(root, orient="vertical", command=trv.yview)
+        vsb.pack(side='right', fill=BOTH)
+        trv.configure(yscrollcommand=vsb.set)
+        trv.heading(1, text="STT")
+        trv.heading(2, text="Giá")
+        trv.heading(3, text="Diện tích")
+        trv.heading(4, text="Số Phòng Ngủ")
+        trv.heading(5, text="Số Toilet")
+        trv.heading(6, text="Số tầng")
+        trv.column("# 1", width = 30)
+        trv.column("# 2", width = 125)
+        trv.column("# 3", width = 125)
+        trv.column("# 4", width = 125)
+        trv.column("# 5", width = 125)
+        trv.column("# 6", width = 125)
+        for row in lst[1:]:
+            trv.insert('', 'end', values = row)
+        
+
+def createTable(): 
+    with open("Dataset.csv", newline = "") as file:
+        reader = csv.reader(file)
+        data = [tuple(row) for row in reader]
+        lst = []
+        for row in data:
+            lst.append(row)
+        t = TreeVieww(wrapperData, lst)   
+
+l7 = tkinter.Label(frame7, text = "Diện Tích (m2): ", font="TimesNewRoman 15 bold")
+l7.pack(side = tkinter.LEFT)
+entry6 = tkinter.Entry (frame7) 
+entry6.insert(END, '100')
+entry6.pack(side = tkinter.LEFT)
+
+l8 = tkinter.Label(frame8, text = "Số Phòng Ngủ: ", font="TimesNewRoman 15 bold")
+l8.pack(side = tkinter.LEFT)
+entry7 = tkinter.Entry (frame8) 
+entry7.insert(END, '3')
+entry7.pack(side = tkinter.LEFT, padx = 2)
+
+l9 = tkinter.Label(frame9, text = "Số Toilet: ", font="TimesNewRoman 15 bold")
+l9.pack(side = tkinter.LEFT)
+entry8 = tkinter.Entry (frame9) 
+entry8.insert(END, '5')
+entry8.pack(side = tkinter.LEFT, padx = 54)
+
+l10 = tkinter.Label(frame10, text = "Số tầng: ", font="TimesNewRoman 15 bold")
+l10.pack(side = tkinter.LEFT)
+entry9 = tkinter.Entry (frame10) 
+entry9.insert(END, '3')
+entry9.pack(side = tkinter.LEFT, padx = 65)
+
 root.bind('<Control-Q>', lambda event=None: root.destroy())
 root.bind('<Control-q>', lambda event=None: root.destroy())
 
+def Predict():
+    messagebox.showinfo("Train")
+    print("Predict")
+    New_Data = [[[int(float(entry6.get())),int(float(entry7.get())),int(float(entry8.get())),int(float(entry9.get()))]]]
+    New_Data = Predicts(New_Data) 
+    New_Data.show()
 
+def Startup():
+    createTable()
+
+predictBtn = tkinter.Button(frame11, text = 'Predict', command= Predict,  bg='brown', fg='white', font=('helvetica', 9, 'bold')) 
+predictBtn.pack()
+
+Startup()
 
 root.mainloop()
-
 

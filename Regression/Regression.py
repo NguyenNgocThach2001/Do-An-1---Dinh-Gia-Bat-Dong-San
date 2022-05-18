@@ -6,7 +6,7 @@ from sklearn.metrics import explained_variance_score
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeRegressor
 
-def Predicts():
+def Predicts(New_Data):
     dataset = pd.read_csv("Dataset.csv", index_col=0)
     # print("Dataset: ")
     # print(dataset)
@@ -45,14 +45,15 @@ def Predicts():
     models_score.sort_values(by='Score',ascending=False)
     print(models_score)
 
-    New_Data = [[[100,1,2,2]]
-            ,[[100,2,1,2]]
-            ,[[100,2,2,1]]
-            ,[[100,2,2,2]]
-            ,[[150,3,1,4]]
-            ,[[125,2,2,1]]
-            ,[[50,2,4,1]]
-            ,[[25,3,3,3]]]
+    # New_Data = [[[100,1,2,2]]
+    #         ,[[100,2,1,2]]
+    #         ,[[100,2,2,1]]
+    #         ,[[100,2,2,2]]
+    #         ,[[150,3,1,4]]
+    #         ,[[125,2,2,1]]
+    #         ,[[50,2,4,1]]
+    #         ,[[25,3,3,3]]
+    #         ,[[200,5,3,3]]]
 
     TRR_Result = []
     print("Regression Tree Predict: ")
@@ -114,6 +115,5 @@ def Predicts():
         plt.plot(it, New_Data[index][0][3], 'o', color = 'red')
     for index, it in enumerate(TRR_Result):
         plt.plot(it, New_Data[index][0][3], 'o', color = 'yellow')
-
-
-    plt.show()
+    return plt
+    # plt.show()
