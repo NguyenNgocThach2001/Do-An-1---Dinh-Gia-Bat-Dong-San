@@ -85,7 +85,8 @@ def Predicts(New_Data):
     for index, it in enumerate(MLR_Result):
         plt.plot(it, New_Data[index][0][0], 'o', color = 'red')
     for index, it in enumerate(TRR_Result):
-        plt.plot(it, New_Data[index][0][0], 'o', color = 'yellow')
+        plt.plot(it, New_Data[index][0][0], 'o', color = 'orange')
+    plt.savefig("IMG1.png")
     plt.figure()
 
     plt.xlabel("Price")
@@ -94,19 +95,20 @@ def Predicts(New_Data):
     for index, it in enumerate(MLR_Result):
         plt.plot(it, New_Data[index][0][1], 'o', color = 'red')
     for index, it in enumerate(TRR_Result):
-        plt.plot(it, New_Data[index][0][1], 'o', color = 'yellow')
+        plt.plot(it, New_Data[index][0][1], 'o', color = 'orange')
+    plt.savefig("IMG2.png")
     plt.figure()
 
 
     plt.xlabel("Price")
     plt.ylabel("Toilets")
     plt.plot(xprice, ytoilet, 'o')
-    plt.figure()
     for index, it in enumerate(MLR_Result):
         plt.plot(it, New_Data[index][0][2], 'o', color = 'red')
     for index, it in enumerate(TRR_Result):
-        plt.plot(it, New_Data[index][0][2], 'o', color = 'yellow')
-
+        plt.plot(it, New_Data[index][0][2], 'o', color = 'orange')
+    plt.savefig("IMG3.png")
+    plt.figure()
 
     plt.xlabel("Price")
     plt.ylabel("Floors")
@@ -114,6 +116,8 @@ def Predicts(New_Data):
     for index, it in enumerate(MLR_Result):
         plt.plot(it, New_Data[index][0][3], 'o', color = 'red')
     for index, it in enumerate(TRR_Result):
-        plt.plot(it, New_Data[index][0][3], 'o', color = 'yellow')
-    return plt
+        plt.plot(it, New_Data[index][0][3], 'o', color = 'orange')
+    plt.savefig("IMG4.png")
+    
+    return plt, ("Kết quả dự đoán" + ": "), (str(round(float(TRR_Result[index]), 2)) + " tỷ "), ("\ "), (str(round(float(MLR_Result[index]),2)) + " tỷ")
     # plt.show()

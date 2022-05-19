@@ -1,5 +1,7 @@
+from cProfile import label
 import csv
 from tkinter import *
+from PIL import ImageTk, Image
 import sys
 sys.path.insert(0, 'Do-An-1---Dinh-Gia-Bat-Dong-San\Selenium_Crawl')
 from Scrape_Page import Crawl_Page
@@ -13,6 +15,7 @@ import sys
 sys.path.insert(0, 'Do-An-1---Dinh-Gia-Bat-Dong-San\Regression')
 from Regression import Predicts
 
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import tkinter
 from tkinter import END, Entry, font
 from tkinter import messagebox
@@ -149,7 +152,7 @@ root = tkinter.Tk(className=' Định Giá Bất Động Sản')
 root.resizable(False, False)
 ws = root.winfo_screenwidth() 
 hs = root.winfo_screenheight() 
-w = 1400
+w = 700
 h = 700
 x = (ws/2) - (w/2)
 y = (hs/2) - (h/2) - 25
@@ -162,30 +165,14 @@ middle_left_frame_container.pack_propagate(0)
 bottom_left_frame_container = tkinter.Frame(root, width=700, height=200)
 bottom_left_frame_container.pack_propagate(0)
 
-top_right_frame_container = tkinter.Frame(root, width=700, height=200)
-top_right_frame_container.pack_propagate(0)
-middle_right_frame_container = tkinter.Frame(root, width=700, height=300)
-middle_right_frame_container.pack_propagate(0)
-bottom_right_frame_container = tkinter.Frame(root, width=700, height=200)
-bottom_right_frame_container.pack_propagate(0)
-
 root.grid_rowconfigure(1, weight=0)
 root.grid_columnconfigure(0, weight=0)
 
-top_left_frame_container.grid(row = 0, sticky="NW")
-middle_left_frame_container.grid(row = 1, sticky="W")
-bottom_left_frame_container.grid(row = 2, sticky="SW")
+top_left_frame_container.grid(row = 0)
+middle_left_frame_container.grid(row = 1)
+bottom_left_frame_container.grid(row = 2)
 
-top_right_frame_container.grid(row = 0, column= 1, sticky="NE")
-middle_right_frame_container.grid(row = 1, column= 1,sticky="E")
-bottom_right_frame_container.grid(row = 2, column= 1,sticky="SE")
 
-wrapperCrawlRight = tkinter.LabelFrame(top_right_frame_container, text="Diện Tích/Giá", width = 700)
-wrapperCrawlRight.pack(fill = BOTH, padx = 10, pady=10)
-frame111 = tkinter.Frame(wrapperCrawlRight)            
-frame111.pack(side = tkinter.TOP, fill = BOTH)
-l111 = tkinter.Label(frame111, text = "Thành Phố: ", font="TimesNewRoman 15 bold")
-l111.pack(side = tkinter.LEFT)
 
 
 wrapperCrawl = tkinter.LabelFrame(top_left_frame_container, text="Cào dữ liệu", width = 700)
@@ -339,12 +326,57 @@ entry9.pack(side = tkinter.LEFT, padx = 65)
 root.bind('<Control-Q>', lambda event=None: root.destroy())
 root.bind('<Control-q>', lambda event=None: root.destroy())
 
+def openNewWindow(plot, root, resultStr1,resultStr2,resultStr3,resultStr4):
+    newWindow = Toplevel(root)
+    newWindow.title("New Window")
+    w = 1200
+    h = 900
+    x = (ws/2) - (w/2)
+    y = (hs/2) - (h/2) - 25
+    newWindow.geometry('%dx%d+%d+%d' % (w, h, x, y))
+    newWindowFrame1 = tkinter.Frame(newWindow)
+    newWindowFrame1.pack(side = 'top')
+    resultLabel1 = tkinter.Label(newWindowFrame1, text = resultStr1,  font="TimesNewRoman 15 bold")
+    resultLabel1.pack(side = 'left')
+    resultLabel2 = tkinter.Label(newWindowFrame1, text = resultStr2 + "(RT)",  font="TimesNewRoman 15 bold", fg='#FFCC00')
+    resultLabel2.pack(side = 'left')
+    resultLabel3 = tkinter.Label(newWindowFrame1, text = resultStr3,  font="TimesNewRoman 15 bold")
+    resultLabel3.pack(side = 'left')
+    resultLabel4 = tkinter.Label(newWindowFrame1, text = resultStr4 + " (MLR)",  font="TimesNewRoman 15 bold", fg = "#FF0000")
+    resultLabel4.pack(side = 'left')
+    newWindowFrame2 = tkinter.Frame(newWindow)
+    newWindowFrame2.pack(side = 'top')
+    img1 = Image.open('IMG1.PNG')
+    img1 = img1.resize((600,400), Image.ANTIALIAS)
+    img1 = ImageTk.PhotoImage(img1)
+    label1 = Label(newWindowFrame2, image = img1)
+    label1.image = img1
+    label1.grid(row=0, column = 0)
+    img2 = Image.open('img2.PNG')
+    img2 = img2.resize((600,400), Image.ANTIALIAS)
+    img2 = ImageTk.PhotoImage(img2)
+    label2 = Label(newWindowFrame2, image = img2)
+    label2.image = img2
+    label2.grid(row=0, column = 1)
+    img3 = Image.open('img3.PNG')
+    img3 = img3.resize((600,400), Image.ANTIALIAS)
+    img3 = ImageTk.PhotoImage(img3)
+    label3 = Label(newWindowFrame2, image = img3)
+    label3.image = img3
+    label3.grid(row=1, column = 0)
+    img4 = Image.open('img4.PNG')
+    img4 = img4.resize((600,400), Image.ANTIALIAS)
+    img4 = ImageTk.PhotoImage(img4)
+    label4 = Label(newWindowFrame2, image = img4)
+    label4.image = img4
+    label4.grid(row=1, column = 1)
+    newWindow.mainloop()
+
 def Predict():
-    messagebox.showinfo("Train")
     print("Predict")
     New_Data = [[[int(float(entry6.get())),int(float(entry7.get())),int(float(entry8.get())),int(float(entry9.get()))]]]
-    New_Data = Predicts(New_Data) 
-    New_Data.show()
+    plot, resultStr1, resultStr2, resultStr3, resultStr4 = Predicts(New_Data) 
+    openNewWindow(plot, root, resultStr1, resultStr2,resultStr3,resultStr4)
 
 def Startup():
     createTable()
