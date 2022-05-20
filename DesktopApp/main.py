@@ -1,6 +1,8 @@
 from cProfile import label
 import csv
+import os
 from tkinter import *
+from tkinter import filedialog
 from PIL import ImageTk, Image
 import sys
 sys.path.insert(0, 'Do-An-1---Dinh-Gia-Bat-Dong-San\Selenium_Crawl')
@@ -140,6 +142,44 @@ class AutocompleteCombobox(tkinter.ttk.Combobox):
                 # No need for up/down, we'll jump to the popup
                 # list at the position of the autocompletion
 
+class TreeVieww:
+    trv = None
+    vsb = None
+    def __init__(self, root, lst):
+        self.trv = tkinter.ttk.Treeview(root,selectmode='browse', columns=(1,2,3,4,5,6), show="headings", height = "12")
+        self.trv.pack(side = 'left')
+        self.vsb = tkinter.ttk.Scrollbar(root, orient="vertical", command=self.trv.yview)
+        self.vsb.pack(side='right', fill=BOTH)
+        self.trv.configure(yscrollcommand=self.vsb.set)
+        self.trv.heading(1, text="STT")
+        self.trv.heading(2, text="Giá")
+        self.trv.heading(3, text="Diện tích")
+        self.trv.heading(4, text="Số Phòng Ngủ")
+        self.trv.heading(5, text="Số Toilet")
+        self.trv.heading(6, text="Số tầng")
+        self.trv.column("# 1", width = 30)
+        self.trv.column("# 2", width = 125)
+        self.trv.column("# 3", width = 125)
+        self.trv.column("# 4", width = 125)
+        self.trv.column("# 5", width = 125)
+        self.trv.column("# 6", width = 125)
+        for row in lst[1:]:
+            self.trv.insert('', 'end', values = row)  
+    def clear(self):
+        self.trv.destroy()
+        self.vsb.destroy()
+        # for item in self.trv.get_children(): # used self.tree instead
+        #     self.trv.delete(item)
+        
+treeView = None
+csvDataPath = ''
+lst = None
+newWindowFrame2 = None     # Frame Biểu đồ phân tán (Scatter Diagram)
+newWindowFrame3 = None     # Frame Biểu đồ cột
+newWindowFrame4 = None     # Frame Biểu đồ đường
+graph1Btn = None
+graph2Btn = None
+graph3Btn = None
 
 DSQH = ('Thành Phố Thủ Đức', 'Quận 1', 'Quận 2', 'Quận 3', 'Quận 4', 'Quận 5', 'Quận 6', 'Quận 7',
         'Quận 8', 'Quận 9', 'Quận 10', 'Quận 11', 'Quận 12', 'Quận Bình Tân',
@@ -148,6 +188,30 @@ DSQH = ('Thành Phố Thủ Đức', 'Quận 1', 'Quận 2', 'Quận 3', 'Quận
         'Huyện Hóc Môn', 'Huyện Nhà Bè')
 
 """Run a mini application to test the AutocompleteEntry Widget."""
+
+def getcsvfilePath():
+    filePath = filedialog.askopenfilename(defaultextension= ' .csv')
+    UpdateTable(filePath)
+    return filePath
+
+def getsavefilePath():
+    filePath = filedialog.asksaveasfile()
+    if(filePath is None):
+        return ''
+    return filePath.name
+
+def savetofile():
+    filePath = getsavefilePath()
+    if(filePath == ''):
+        return
+    filePath = os.path.splitext(filePath)[0]
+    with open(filePath + ".csv",'w+', encoding='utf8') as out:
+        csv_out=csv.writer(out)
+        for row in lst:
+                csv_out.writerow(row)
+    print("Done save file")
+
+
 root = tkinter.Tk(className=' Định Giá Bất Động Sản')
 root.resizable(False, False)
 ws = root.winfo_screenwidth() 
@@ -172,9 +236,6 @@ top_left_frame_container.grid(row = 0)
 middle_left_frame_container.grid(row = 1)
 bottom_left_frame_container.grid(row = 2)
 
-
-
-
 wrapperCrawl = tkinter.LabelFrame(top_left_frame_container, text="Cào dữ liệu", width = 700)
 wrapperCrawl.pack(fill = BOTH, padx = 10, pady=10)
 
@@ -189,8 +250,19 @@ frame4.pack(side = tkinter.TOP, fill = BOTH)
 frame5 = tkinter.Frame(wrapperCrawl)            #Crawl Btn
 frame5.pack(side = tkinter.TOP, fill = BOTH)
 
+
 wrapperData = tkinter.LabelFrame(middle_left_frame_container, text = "Dữ Liệu", width=700)
 wrapperData.pack(fill = BOTH, padx = 10, pady=10)
+wrapperDataFrame1 = tkinter.Frame(wrapperData)
+wrapperDataFrame1.pack(side = 'top', fill = BOTH)
+wrapperDataFrame2 = tkinter.Frame(wrapperData)
+wrapperDataFrame2.pack(side = 'top', fill = BOTH)
+
+opencsvfileBtn = tkinter.Button(wrapperDataFrame1, text='Open csv', command=getcsvfilePath, bg='brown', fg='white', font=('helvetica', 9, 'bold'))
+opencsvfileBtn.pack(side = 'left')
+
+opencsvfileBtn = tkinter.Button(wrapperDataFrame1, text='Save csv', command=savetofile, bg='brown', fg='white', font=('helvetica', 9, 'bold'))
+opencsvfileBtn.pack(side = 'left')
 
 wrapperPredict = tkinter.LabelFrame(bottom_left_frame_container, text = "Nhập và định giá bất động sản", width=700)
 wrapperPredict.pack(fill = BOTH, padx = 10, pady=10)
@@ -263,41 +335,31 @@ def CrawlData():
     print("Điền dữ liệu khuyết")
     FillMissing(int(float(entry2.get())), int(float(entry4.get())))
     print("Xong")
+    UpdateTable([()], "Dataset.csv")
 
 submitBtn = tkinter.Button(frame5, text='Crawl Data', command=CrawlData, bg='brown', fg='white', font=('helvetica', 9, 'bold'))
 submitBtn.pack(side = tkinter.TOP)
 
-class TreeVieww:
-    def __init__(self, root, lst):
-        trv = tkinter.ttk.Treeview(root,selectmode='browse', columns=(1,2,3,4,5,6), show="headings", height = "12")
-        trv.pack(side = 'left')
-        vsb = tkinter.ttk.Scrollbar(root, orient="vertical", command=trv.yview)
-        vsb.pack(side='right', fill=BOTH)
-        trv.configure(yscrollcommand=vsb.set)
-        trv.heading(1, text="STT")
-        trv.heading(2, text="Giá")
-        trv.heading(3, text="Diện tích")
-        trv.heading(4, text="Số Phòng Ngủ")
-        trv.heading(5, text="Số Toilet")
-        trv.heading(6, text="Số tầng")
-        trv.column("# 1", width = 30)
-        trv.column("# 2", width = 125)
-        trv.column("# 3", width = 125)
-        trv.column("# 4", width = 125)
-        trv.column("# 5", width = 125)
-        trv.column("# 6", width = 125)
-        for row in lst[1:]:
-            trv.insert('', 'end', values = row)
-        
+def UpdateTable(path):
+        global treeView
+        global csvDataPath
+        global lst
+        csvDataPath = path
+        treeView.clear()
+        with open(path, newline = "", encoding="utf8") as file:
+                reader = csv.reader(file)
+                data = [tuple(row) for row in reader]
+                lst = []
+                for row in data[:]:
+                    lst.append(row)
+                    print(row)
+                treeView = TreeVieww(wrapperDataFrame2, lst) 
+        print("Done update table")
 
 def createTable(): 
-    with open("Dataset.csv", newline = "") as file:
-        reader = csv.reader(file)
-        data = [tuple(row) for row in reader]
-        lst = []
-        for row in data:
-            lst.append(row)
-        t = TreeVieww(wrapperData, lst)   
+    global treeView 
+    treeView = TreeVieww(wrapperDataFrame2, [()])   
+    print("Done create table")
 
 l7 = tkinter.Label(frame7, text = "Diện Tích (m2): ", font="TimesNewRoman 15 bold")
 l7.pack(side = tkinter.LEFT)
@@ -326,7 +388,21 @@ entry9.pack(side = tkinter.LEFT, padx = 65)
 root.bind('<Control-Q>', lambda event=None: root.destroy())
 root.bind('<Control-q>', lambda event=None: root.destroy())
 
+def showgraphpage(frame, Btn):
+    Btn[0].configure(bg = 'black')
+    Btn[1].configure(bg = 'brown')
+    Btn[2].configure(bg = 'brown')
+    frame.tkraise()
+    print("show graph page")
+    return 0 
+
 def openNewWindow(plot, root, resultStr1,resultStr2,resultStr3,resultStr4):
+    global newWindowFrame2 # Frame Biểu đồ phân tán (Scatter Diagram)
+    global newWindowFrame3 # Frame Biểu đồ cột
+    global newWindowFrame4 # Frame Biểu đồ đường
+    global graph1Btn
+    global graph2Btn
+    global graph3Btn
     newWindow = Toplevel(root)
     newWindow.title("New Window")
     w = 1200
@@ -344,8 +420,21 @@ def openNewWindow(plot, root, resultStr1,resultStr2,resultStr3,resultStr4):
     resultLabel3.pack(side = 'left')
     resultLabel4 = tkinter.Label(newWindowFrame1, text = resultStr4 + " (MLR)",  font="TimesNewRoman 15 bold", fg = "#FF0000")
     resultLabel4.pack(side = 'left')
-    newWindowFrame2 = tkinter.Frame(newWindow)
-    newWindowFrame2.pack(side = 'top')
+
+    graphFrameContainer = tkinter.Frame(newWindow)
+    graphFrameContainer.rowconfigure(0, weight = 1)
+    graphFrameContainer.columnconfigure(0, weight = 1)
+    graphFrameContainer.pack(side= 'top', fill = BOTH)
+    newWindowFrame2 = tkinter.Frame(graphFrameContainer)     # Frame Biểu đồ phân tán (Scatter Diagram)
+    newWindowFrame3 = tkinter.Frame(graphFrameContainer)     # Frame Biểu đồ cột (Bar Chart)
+    newWindowFrame4 = tkinter.Frame(graphFrameContainer)     # Frame Biểu đồ đường
+    newWindowFrame5 = tkinter.Frame(newWindow)               # Frame Chuyển biểu đồ
+    newWindowFrame5.pack()
+
+    for frame in (newWindowFrame2, newWindowFrame3, newWindowFrame4):
+        frame.grid(row = 0, column = 0, sticky = 'nsew')
+
+    # Frame Biểu đồ phân tán (Scatter Diagram)
     img1 = Image.open('IMG1.PNG')
     img1 = img1.resize((600,400), Image.ANTIALIAS)
     img1 = ImageTk.PhotoImage(img1)
@@ -370,12 +459,78 @@ def openNewWindow(plot, root, resultStr1,resultStr2,resultStr3,resultStr4):
     label4 = Label(newWindowFrame2, image = img4)
     label4.image = img4
     label4.grid(row=1, column = 1)
+
+    # Frame Biểu đồ cột (Bar Chart)
+    img11 = Image.open('img11.PNG')
+    img11 = img11.resize((600,400), Image.ANTIALIAS)
+    img11 = ImageTk.PhotoImage(img11)
+    label11 = Label(newWindowFrame3, image = img11)
+    label11.image = img11
+    label11.grid(row=0, column = 0)
+    img22 = Image.open('img22.PNG')
+    img22 = img22.resize((600,400), Image.ANTIALIAS)
+    img22 = ImageTk.PhotoImage(img22)
+    label22 = Label(newWindowFrame3, image = img22)
+    label22.image = img22
+    label22.grid(row=0, column = 1)
+    img33 = Image.open('img33.PNG')
+    img33 = img33.resize((600,400), Image.ANTIALIAS)
+    img33 = ImageTk.PhotoImage(img33)
+    label33 = Label(newWindowFrame3, image = img33)
+    label33.image = img33
+    label33.grid(row=1, column = 0)
+    img44 = Image.open('img44.PNG')
+    img44 = img44.resize((600,400), Image.ANTIALIAS)
+    img44 = ImageTk.PhotoImage(img44)
+    label44 = Label(newWindowFrame3, image = img44)
+    label44.image = img44
+    label44.grid(row=1, column = 1)
+
+    # Frame Biểu đồ đường
+
+    img111 = Image.open('img2.PNG')
+    img111 = img111.resize((600,400), Image.ANTIALIAS)
+    img111 = ImageTk.PhotoImage(img111)
+    label111 = Label(newWindowFrame4, image = img111)
+    label111.image = img111
+    label111.grid(row=0, column = 0)
+    img222 = Image.open('img2.PNG')
+    img222 = img222.resize((600,400), Image.ANTIALIAS)
+    img222 = ImageTk.PhotoImage(img222)
+    label22 = Label(newWindowFrame4, image = img222)
+    label22.image = img222
+    label22.grid(row=0, column = 1)
+    img333 = Image.open('img2.PNG')
+    img333 = img333.resize((600,400), Image.ANTIALIAS)
+    img333 = ImageTk.PhotoImage(img333)
+    label333 = Label(newWindowFrame4, image = img333)
+    label333.image = img333
+    label333.grid(row=1, column = 0)
+    img444 = Image.open('img2.PNG')
+    img444 = img444.resize((600,400), Image.ANTIALIAS)
+    img444 = ImageTk.PhotoImage(img444)
+    label444 = Label(newWindowFrame4, image = img444)
+    label444.image = img444
+    label444.grid(row=1, column = 1)
+
+    #Các Btn chuyển biểu đồ
+    graph1Btn = tkinter.Button(newWindowFrame5, text = 'Biểu đồ phân tán', command= lambda:showgraphpage(newWindowFrame2,(graph1Btn, graph2Btn, graph3Btn)),  bg='Black', fg='white', font=('helvetica', 9, 'bold')) 
+    graph1Btn.pack(side = 'left', fill=BOTH)
+    graph2Btn = tkinter.Button(newWindowFrame5, text = 'Biểu đồ cột', command= lambda:showgraphpage(newWindowFrame3,(graph2Btn, graph1Btn, graph3Btn)),  bg='brown', fg='white', font=('helvetica', 9, 'bold')) 
+    graph2Btn.pack(side = 'left', fill=BOTH)
+    graph3Btn = tkinter.Button(newWindowFrame5, text = 'Biểu đồ đường', command= lambda:showgraphpage(newWindowFrame4,(graph3Btn, graph2Btn, graph1Btn)),  bg='brown', fg='white', font=('helvetica', 9, 'bold')) 
+    graph3Btn.pack(side = 'left', fill=BOTH)
+
+    showgraphpage(newWindowFrame2)
     newWindow.mainloop()
 
 def Predict():
     print("Predict")
+    if(csvDataPath == ''):
+        messagebox.showinfo("Lỗi", "Bạn phải có dữ liệu trước khi dự đoán")
+        return
     New_Data = [[[int(float(entry6.get())),int(float(entry7.get())),int(float(entry8.get())),int(float(entry9.get()))]]]
-    plot, resultStr1, resultStr2, resultStr3, resultStr4 = Predicts(New_Data) 
+    plot, resultStr1, resultStr2, resultStr3, resultStr4 = Predicts(New_Data, csvDataPath) 
     openNewWindow(plot, root, resultStr1, resultStr2,resultStr3,resultStr4)
 
 def Startup():

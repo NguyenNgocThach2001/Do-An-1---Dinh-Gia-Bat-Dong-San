@@ -5,9 +5,12 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import explained_variance_score
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeRegressor
+import collections
 
-def Predicts(New_Data):
-    dataset = pd.read_csv("Dataset.csv", index_col=0)
+def Predicts(New_Data, csvDataPath):
+    if(csvDataPath == ''):
+        return 0, '', '', '', ''
+    dataset = pd.read_csv(csvDataPath, index_col=0)
     # print("Dataset: ")
     # print(dataset)
 
@@ -78,6 +81,7 @@ def Predicts(New_Data):
     ytoilet = df[ :, 3]#toilet
     yfloor = df[ :, 4]#floor
 
+    # Biểu đồ phân tán 
     plt.figure()
     plt.plot(xprice, yareage, 'o')
     plt.xlabel("Price")
@@ -87,8 +91,9 @@ def Predicts(New_Data):
     for index, it in enumerate(TRR_Result):
         plt.plot(it, New_Data[index][0][0], 'o', color = 'orange')
     plt.savefig("IMG1.png")
-    plt.figure()
 
+
+    plt.figure()
     plt.xlabel("Price")
     plt.ylabel("Bedrooms")
     plt.plot(xprice, ybedroom, 'o' )
@@ -97,9 +102,9 @@ def Predicts(New_Data):
     for index, it in enumerate(TRR_Result):
         plt.plot(it, New_Data[index][0][1], 'o', color = 'orange')
     plt.savefig("IMG2.png")
+
+
     plt.figure()
-
-
     plt.xlabel("Price")
     plt.ylabel("Toilets")
     plt.plot(xprice, ytoilet, 'o')
@@ -108,8 +113,8 @@ def Predicts(New_Data):
     for index, it in enumerate(TRR_Result):
         plt.plot(it, New_Data[index][0][2], 'o', color = 'orange')
     plt.savefig("IMG3.png")
-    plt.figure()
 
+    plt.figure()
     plt.xlabel("Price")
     plt.ylabel("Floors")
     plt.plot(xprice, yfloor, 'o')
@@ -118,6 +123,27 @@ def Predicts(New_Data):
     for index, it in enumerate(TRR_Result):
         plt.plot(it, New_Data[index][0][3], 'o', color = 'orange')
     plt.savefig("IMG4.png")
+
+
+    #Biểu đồ cột 
+    df = pd.DataFrame(dataset)
+    plt.figure()
+    df['Diện Tích'].value_counts().plot(kind='bar', xlabel='Diện Tích', ylabel='Tần Suất')
+    plt.savefig("IMG11.png")
+
+    plt.figure()
+    df['Số phòng ngủ'].value_counts().plot(kind='bar', xlabel='Số Phòng Ngủ', ylabel='Tần Suất')
+    plt.savefig("IMG22.png")
+
+    plt.figure()
+    df['Số toilet'].value_counts().plot(kind='bar', xlabel='Số Toilet', ylabel='Tần Suất')
+    plt.savefig("IMG33.png")
+
+    plt.figure()
+    df['Số tầng'].value_counts().plot(kind='bar', xlabel='Số Tầng', ylabel='Tần Suất')
+    plt.savefig("IMG44.png")
     
+
+
     return plt, ("Kết quả dự đoán" + ": "), (str(round(float(TRR_Result[index]), 2)) + " tỷ "), ("\ "), (str(round(float(MLR_Result[index]),2)) + " tỷ")
     # plt.show()
