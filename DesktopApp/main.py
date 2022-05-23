@@ -435,93 +435,81 @@ def openNewWindow(plot, root, resultStr1,resultStr2,resultStr3,resultStr4):
         frame.grid(row = 0, column = 0, sticky = 'nsew')
 
     # Frame Biểu đồ phân tán (Scatter Diagram)
+    wrapper2 = tkinter.LabelFrame(newWindowFrame2, text="Kết quả dự đoán và dữ liệu")
+    wrapper2.pack(fill = BOTH, padx = 5, pady=5)
     img1 = Image.open('IMG1.PNG')
-    img1 = img1.resize((600,400), Image.ANTIALIAS)
+    img1 = img1.resize((588,398), Image.ANTIALIAS)
     img1 = ImageTk.PhotoImage(img1)
-    label1 = Label(newWindowFrame2, image = img1)
+    label1 = Label(wrapper2, image = img1)
     label1.image = img1
     label1.grid(row=0, column = 0)
     img2 = Image.open('img2.PNG')
-    img2 = img2.resize((600,400), Image.ANTIALIAS)
+    img2 = img2.resize((588,398), Image.ANTIALIAS)
     img2 = ImageTk.PhotoImage(img2)
-    label2 = Label(newWindowFrame2, image = img2)
+    label2 = Label(wrapper2, image = img2)
     label2.image = img2
     label2.grid(row=0, column = 1)
     img3 = Image.open('img3.PNG')
-    img3 = img3.resize((600,400), Image.ANTIALIAS)
+    img3 = img3.resize((588,398), Image.ANTIALIAS)
     img3 = ImageTk.PhotoImage(img3)
-    label3 = Label(newWindowFrame2, image = img3)
+    label3 = Label(wrapper2, image = img3)
     label3.image = img3
     label3.grid(row=1, column = 0)
     img4 = Image.open('img4.PNG')
-    img4 = img4.resize((600,400), Image.ANTIALIAS)
+    img4 = img4.resize((588,398), Image.ANTIALIAS)
     img4 = ImageTk.PhotoImage(img4)
-    label4 = Label(newWindowFrame2, image = img4)
+    label4 = Label(wrapper2, image = img4)
     label4.image = img4
     label4.grid(row=1, column = 1)
 
     # Frame Biểu đồ cột (Bar Chart)
+    wrapper3 = tkinter.LabelFrame(newWindowFrame3, text="Tần suất xuất hiện của dữ liệu")
+    wrapper3.pack(fill = BOTH, padx = 5, pady=5)
     img11 = Image.open('img11.PNG')
-    img11 = img11.resize((600,400), Image.ANTIALIAS)
+    img11 = img11.resize((588,398), Image.ANTIALIAS)
     img11 = ImageTk.PhotoImage(img11)
-    label11 = Label(newWindowFrame3, image = img11)
+    label11 = Label(wrapper3, image = img11)
     label11.image = img11
     label11.grid(row=0, column = 0)
     img22 = Image.open('img22.PNG')
-    img22 = img22.resize((600,400), Image.ANTIALIAS)
+    img22 = img22.resize((588,398), Image.ANTIALIAS)
     img22 = ImageTk.PhotoImage(img22)
-    label22 = Label(newWindowFrame3, image = img22)
+    label22 = Label(wrapper3, image = img22)
     label22.image = img22
     label22.grid(row=0, column = 1)
     img33 = Image.open('img33.PNG')
-    img33 = img33.resize((600,400), Image.ANTIALIAS)
+    img33 = img33.resize((588,398), Image.ANTIALIAS)
     img33 = ImageTk.PhotoImage(img33)
-    label33 = Label(newWindowFrame3, image = img33)
+    label33 = Label(wrapper3, image = img33)
     label33.image = img33
     label33.grid(row=1, column = 0)
     img44 = Image.open('img44.PNG')
-    img44 = img44.resize((600,400), Image.ANTIALIAS)
+    img44 = img44.resize((588,398), Image.ANTIALIAS)
     img44 = ImageTk.PhotoImage(img44)
-    label44 = Label(newWindowFrame3, image = img44)
+    label44 = Label(wrapper3, image = img44)
     label44.image = img44
     label44.grid(row=1, column = 1)
 
-    # Frame Biểu đồ đường
-
-    img111 = Image.open('img2.PNG')
-    img111 = img111.resize((600,400), Image.ANTIALIAS)
+    # Frame Biểu đồ song song
+    wrapper4 = tkinter.LabelFrame(newWindowFrame4, text="Bất động sản cần dự đoán và dữ liệu")
+    wrapper4.pack(fill = BOTH, padx = 5, pady=5)
+    img111 = Image.open('img55.PNG')
+    img111 = img111.resize((1176,796), Image.ANTIALIAS)
     img111 = ImageTk.PhotoImage(img111)
-    label111 = Label(newWindowFrame4, image = img111)
+    label111 = Label(wrapper4, image = img111)
     label111.image = img111
-    label111.grid(row=0, column = 0)
-    img222 = Image.open('img2.PNG')
-    img222 = img222.resize((600,400), Image.ANTIALIAS)
-    img222 = ImageTk.PhotoImage(img222)
-    label22 = Label(newWindowFrame4, image = img222)
-    label22.image = img222
-    label22.grid(row=0, column = 1)
-    img333 = Image.open('img2.PNG')
-    img333 = img333.resize((600,400), Image.ANTIALIAS)
-    img333 = ImageTk.PhotoImage(img333)
-    label333 = Label(newWindowFrame4, image = img333)
-    label333.image = img333
-    label333.grid(row=1, column = 0)
-    img444 = Image.open('img2.PNG')
-    img444 = img444.resize((600,400), Image.ANTIALIAS)
-    img444 = ImageTk.PhotoImage(img444)
-    label444 = Label(newWindowFrame4, image = img444)
-    label444.image = img444
-    label444.grid(row=1, column = 1)
+    label111.pack()
+    
 
     #Các Btn chuyển biểu đồ
     graph1Btn = tkinter.Button(newWindowFrame5, text = 'Biểu đồ phân tán', command= lambda:showgraphpage(newWindowFrame2,(graph1Btn, graph2Btn, graph3Btn)),  bg='Black', fg='white', font=('helvetica', 9, 'bold')) 
     graph1Btn.pack(side = 'left', fill=BOTH)
     graph2Btn = tkinter.Button(newWindowFrame5, text = 'Biểu đồ cột', command= lambda:showgraphpage(newWindowFrame3,(graph2Btn, graph1Btn, graph3Btn)),  bg='brown', fg='white', font=('helvetica', 9, 'bold')) 
     graph2Btn.pack(side = 'left', fill=BOTH)
-    graph3Btn = tkinter.Button(newWindowFrame5, text = 'Biểu đồ đường', command= lambda:showgraphpage(newWindowFrame4,(graph3Btn, graph2Btn, graph1Btn)),  bg='brown', fg='white', font=('helvetica', 9, 'bold')) 
+    graph3Btn = tkinter.Button(newWindowFrame5, text = 'Biểu đồ song song', command= lambda:showgraphpage(newWindowFrame4,(graph3Btn, graph2Btn, graph1Btn)),  bg='brown', fg='white', font=('helvetica', 9, 'bold')) 
     graph3Btn.pack(side = 'left', fill=BOTH)
 
-    showgraphpage(newWindowFrame2)
+    showgraphpage(newWindowFrame2,(graph1Btn, graph2Btn, graph3Btn))
     newWindow.mainloop()
 
 def Predict():

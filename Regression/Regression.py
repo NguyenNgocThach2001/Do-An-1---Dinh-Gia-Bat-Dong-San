@@ -1,3 +1,4 @@
+from lib2to3.pgen2.pgen import DFAState
 from matplotlib import pyplot as plt
 import numpy as np
 import pandas as pd
@@ -5,6 +6,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import explained_variance_score
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeRegressor
+from pandas.plotting import parallel_coordinates
 import collections
 
 def Predicts(New_Data, csvDataPath):
@@ -143,7 +145,11 @@ def Predicts(New_Data, csvDataPath):
     df['Số tầng'].value_counts().plot(kind='bar', xlabel='Số Tầng', ylabel='Tần Suất')
     plt.savefig("IMG44.png")
     
-
+    #Biểu đồ song song
+    plt.figure()
+    fig = parallel_coordinates(dataset, 'Giá', color = 'blue')
+    fig.plot(New_Data[0], color = 'red')
+    plt.savefig("IMG55.png")
 
     return plt, ("Kết quả dự đoán" + ": "), (str(round(float(TRR_Result[index]), 2)) + " tỷ "), ("\ "), (str(round(float(MLR_Result[index]),2)) + " tỷ")
     # plt.show()
