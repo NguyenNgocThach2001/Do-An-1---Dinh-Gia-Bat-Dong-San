@@ -404,7 +404,7 @@ def openNewWindow(plot, root, resultStr1,resultStr2,resultStr3,resultStr4):
     global graph2Btn
     global graph3Btn
     newWindow = Toplevel(root)
-    newWindow.title("New Window")
+    newWindow.title("Kết quả định giá và trực quan hóa dữ liệu")
     w = 1200
     h = 900
     x = (ws/2) - (w/2)
